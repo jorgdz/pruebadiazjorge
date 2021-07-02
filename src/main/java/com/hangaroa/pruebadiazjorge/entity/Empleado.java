@@ -10,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -37,8 +38,8 @@ public class Empleado implements Serializable{
 	private static final long serialVersionUID = -4732891610270496689L;
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CUST_SEQ")
-    @SequenceGenerator(sequenceName = "IncrementEmpleados", allocationSize = 1, name = "CUST_SEQ")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EMP_SEQ")
+	@SequenceGenerator(sequenceName = "increment_empleados", allocationSize = 1, name = "EMP_SEQ")
     @Column(name = "codigo_empleado")
 	private Long codigoEmpleado;
 	
@@ -77,12 +78,12 @@ public class Empleado implements Serializable{
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate fechaNacimiento;
 	
-	@NotEmpty(message = "El sueldo es obligatorio.")
 	@NotNull(message = "El sueldo no puede ser nulo.")
 	private Double sueldo;
 	
 	@ManyToOne
 	@JsonIgnoreProperties({"empleados"})
+	@JoinColumn(name = "codigo_departamento", referencedColumnName = "codigo_departamento")
     private Departamento departamento;
 	
 }

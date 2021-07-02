@@ -1,7 +1,6 @@
 package com.hangaroa.pruebadiazjorge.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +18,10 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.hangaroa.pruebadiazjorge.util.enums.SiglaCiudadEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,13 +30,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "departamentos")
+@JsonInclude(Include.NON_NULL)
 public class Departamento implements Serializable {
 
 	private static final long serialVersionUID = 301221593452760975L;
 
 	@Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CUST_SEQ")
-    @SequenceGenerator(sequenceName = "IncrementDepartamentos", allocationSize = 1, name = "CUST_SEQ")
+	@SequenceGenerator(sequenceName = "increment_departamentos", allocationSize = 1, name = "CUST_SEQ")
     @Column(name = "codigo_departamento")
 	private Long codigoDepartamento;
     
@@ -49,6 +52,7 @@ public class Departamento implements Serializable {
 
 	@OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties({"departamento"})
+	@JsonProperty(access = Access.READ_ONLY)
 	private List<Empleado> empleados;
 		
 	public Departamento(Long codigoDepartamento,
